@@ -10,6 +10,7 @@ function [L,P,D]=MLDS_TriadLikelihood(stim,response,p)
 %
 % Uncomment the visualization part where perceptual scale values are monitored.
 
+plotting = 1;
 
 sigma         = p(end);
 p(end)        = [];
@@ -43,15 +44,16 @@ P = normcdf(D(:),0,sigma);
 L = -log(  (P).^response(:).*(1-P).^(1-response(:)) );
 L = mean(L);
 
-
-% % % %plot the stuff online
-% % % figure(6);
-% % % if tdimen == 2
-% % %     plot(p(1,:),p(2,:),'o-')
-% % % elseif tdimen == 1
-% % %     plot(p,'o-');
-% % % else tdimen == 3
-% % %     plot(p(1,:),p(2,:),'o-')
-% % % end
-% % % axis square
-% % % drawnow;
+if plotting
+    %plot the stuff online
+    figure(6);
+    if tdimen == 2
+        plot(p(1,:),p(2,:),'o-')
+    elseif tdimen == 1
+        plot(p,'o-');
+    else tdimen == 3
+        plot(p(1,:),p(2,:),'o-')
+    end
+    axis square
+    drawnow;
+end

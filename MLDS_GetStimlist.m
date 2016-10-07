@@ -66,7 +66,7 @@ if type == 1
     
     %if percentage is different than zero remove randomly some trials.
     if Percentage ~= 100;
-        i = randsample(1:size(StimList,1),round(size(StimList,1))*Percentage/100);
+        i = randsample(1:size(StimList,1),floor(size(StimList,1)*Percentage/100));
         StimList = StimList(i,:);
     end   
     
@@ -77,7 +77,7 @@ elseif type == 2
 % overlapping pairs.
     StimList  = CircularQuadruplets(repetition,MaxIntervalSize);        
     if Percentage ~= 100;
-        i = randsample(1:size(StimList,1),round(size(StimList,1))*Percentage/100);
+        i = randsample(1:size(StimList,1),floor(size(StimList,1)*Percentage/100));
         StimList = StimList(i,:);
     end   
 elseif type == 3
