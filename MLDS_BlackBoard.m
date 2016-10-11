@@ -51,12 +51,12 @@ Subject1D = MLDS_CreateSubject(1,'power');
 plot(Subject1D(1,:),'ro-');
 %% get stimuli: 
 %Circularly organized 8 stimuli, repeat 1000 times so that we dont have issues on not enough data.
-StimList = MLDS_GetStimlist(2,1000,5);
+StimList = MLDS_GetStimlist(2,100,5);
 X        = MLDS_Q2DM(StimList);% a beautiful design matrix
 
 %% get responses
-R1D = MLDS_GetResponses(StimList,Subject1D,0.25)';%noise is Gaussian(0,0.25), we have to think whether this is a good noise model, coz responses should never because less than 0.
-R2D = MLDS_GetResponses(StimList,Subject2D,0.25)';
+R1D = MLDS_GetResponses(StimList,Subject1D,0.01)';%noise is Gaussian(0,0.25), we have to think whether this is a good noise model, coz responses should never because less than 0.
+R2D = MLDS_GetResponses(StimList,Subject2D,0.01)';
 
 %% use TK magic, first proof of concept
 % PsiValues = glmfit(X,R1D,'binomial','link','logit','constant','on');%this will not work because the rank of X is 7, however it has 8 columns.
@@ -66,7 +66,12 @@ PsiValues = glmfit(X(:,2:end),R1D,'binomial','link','logit','constant','on');%Co
 clf;plot(zscore([0 ;PsiValues(2:end)]),'o');hold on;plot(zscore(Subject1D),'r-');hold off;%looks perfect.
 %% so now let's try the SO magic with 2D.
 PsiValues = glmfit(X(:,2:end),R2D,'binomial','link','logit','constant','off');%Constant=Off, gives crap results, think about it.
-clf;plot(zscore([0 ;PsiValues(2:end)]),'o');hold on;plot(zscore(Subject2D(1,:)),'r-');hold off;%looks like we get the 1 cycle of oscilation.
+clf;plot(zscore([0 ;PsiValues(1:end)]),'o');hold on;plot(zscore(Subject2D(2,:)),'r-');hold off;%looks like we get the 1 cycle of oscilation.
 %% now we would like to project distances in X to two orthognal spaces and re-run the same analysis...
-PsiValues = glmfit(X(:,2:end),R2D,'binomial','link','logit','constant','off');%Constant=Off, gives crap results, think about it.
-clf;plot(zscore([0 ;PsiValues(2:end)]),'o');hold on;plot(zscore(Subject2D(1,:)),'r-');hold off;%looks like we get the 1 cycle of oscilation.
+PsiValues1 = glmfit(cos(X(:,2:end)),R2D,'binomial','link','logit','constant','off');%Constant=Off, gives crap results, think about it.
+PsiValues2 = glmfit(sin(X(:,2:end)),R2D,'binomial','link','logit','constant','off');%Constant=Off, gives crap results, think about it.
+clf;plot([PsiValues1(1:end)],[PsiValues2(1:end)],'o-');%this kind a look circular but well, the main point is to understand the X.
+%in X we have say -1 1 -1 1, this is just an indicator variable on
+%conditions that are gonna be compared. the initial idea with the cos and
+%sin was for me to use two orthogonal dimensions to describe these
+%distances and solve the combined linear system.
