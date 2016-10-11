@@ -23,9 +23,9 @@ for i = 1:size(StimList,1)
     %each call of NORM computes the euclidian distance between
     %NODES. Their differences are taken and a random noise is
     %added.
-    if size(StimList,2) == 4
+    if size(StimList,2) == 4%for quadruplets
         D  = norm(Subject(:,StimList(i,2))'- Subject(:,StimList(i,1))') - norm(Subject(:,StimList(i,4))'-Subject(:,StimList(i,3))') + randn(1)*Noise;
-    elseif size(StimList,2) == 3
+    elseif size(StimList,2) == 3%for triads
         %first one is up, then left and right
         D  = norm(Subject(:,StimList(i,2))'- Subject(:,StimList(i,1))') - norm(Subject(:,StimList(i,3))'-Subject(:,StimList(i,1))') + randn(1)*Noise;
     end
