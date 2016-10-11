@@ -10,7 +10,7 @@ function [Estimate,ExitFlag,Likelihood]=MLDS_MLE(StimList,R,ModelDimen)
 %
 % Depends on MLDS_TriadLikelihood
 
-plotting  = 0;
+
 options   = optimset('Display','off','maxfunevals',10000,'tolfun',10^-12,'tolx',10^-12,'tolcon',10^-12,'maxiter',4000);
 %Function that will be optimized... It is a wrapper aroudn
 %TRIADLIKELIHOOD so that the initial values in [P0 sigm] are passed
@@ -56,7 +56,7 @@ for s = x;
     l(c) = [funny([p0 ;s])];
 end
 [mi i] = min(l);
-figure(100);plot(x,l)
+%figure(100);plot(x,l)
 sigma  = x(i);
 fprintf('Estimated Sigma is %03s\n',sigma);
 
